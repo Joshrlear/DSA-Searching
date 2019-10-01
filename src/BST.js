@@ -1,3 +1,5 @@
+const Queue = require('./Queue')
+
 class BST {
     constructor(key = null, value = null, parent = null){
         this.key = key
@@ -94,6 +96,92 @@ class BST {
         if (!this.left) { return this }
         return this.left._findMin()
     }
+
+    _findMax() {
+        if (!this.right) { return this }
+        return this.right._findMax()
+    }
+
+    preOrder(values = []) {
+        // root
+        values.push(this.value)
+        // left child
+        if (this.left) { values = this.left.preOrder(values) }
+        // right child
+        if (this.right) { values = this.right.preOrder(values) }
+        // return values
+        return values
+    }
+
+    inOrder(values = []) {
+        // left child
+        if (this.left) { values = this.left.inOrder(values) }
+        // root
+        values.push(this.value)
+        // right child
+        if (this.right) { values = this.right.inOrder(values) }
+        // return values
+        return values
+    }
+
+    postOrder(values = []) {
+        // left child
+        if (this.left) { values = this.left.postOrder(values) }
+        // right child
+        if (this.right) { values = this.right.postOrder(values) }
+        // root
+        values.push(this.value)
+        // return values
+        return values
+    }
+
+    breadthFirstSearch(values = []) {
+        const queue = new Queue()
+        const node = this
+        queue.enqueue(node)
+        while (queue.length) {
+            const node = queue.dequeue() //remove from the queue
+            values.push(node.value) // add that value from the queue to an array
+
+            if (node.left) {
+                queue.enqueue(node.left) //add left child to the queue
+            }
+
+            if (node.right) {
+                queue.enqueue(node.right) // add right child to the queue
+            }
+        }
+        return values
+    }
+
+    findMaxProfit() {
+        const queue = new Queue()
+        const node = this
+        let buy = this
+        let sell = this.right || this.left
+        queue.enqueue(node)
+        while (queue.length) {
+            //remove from the queue
+            const node = queue.dequeue()
+            // smallest value
+            if (buy.key > node.key) { buy = node }
+            // largest value that isn't root and is later in array
+            if (node.parent && sell.value < node.value && sell.key < node.key) { sell = node }
+            
+            if (node.left) {
+                //add left child to the queue
+                queue.enqueue(node.left)
+            }
+
+            if (node.right) {
+                // add right child to the queue
+                queue.enqueue(node.right)
+            }
+        }
+        return `buy at: ${buy.key} sell at: ${sell.key}`
+    }
 }
+
+// Egg drop answer - none :) full answer on readme
 
 module.exports = BST;

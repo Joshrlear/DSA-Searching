@@ -48,8 +48,8 @@ class App extends React.Component {
         <form style={ formStyles } onSubmit={ e => {
           e.preventDefault()
           const binary = binarySearch(this.array.current.value.split(' ').sort(), this.value.current.value)
-          const linear = linearSearch(this.array.current.value.split(' '), this.value.current.value)
-          const other = this.array.current.value.split(' ').indexOf(this.value.current.value)
+          const linear = linearSearch(this.array.current.value.split(' ').sort(), this.value.current.value)
+          const other = this.array.current.value.split(' ').sort().indexOf(this.value.current.value)
           console.log("linear:", linear)
           console.log("binary:", binary)
           console.log("indexOf:",other)
